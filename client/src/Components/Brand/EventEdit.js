@@ -16,8 +16,6 @@ const OfferEdit = (props) => {
         date: '',
         city: '',
         address: '',
-        capacityM: '',
-        capacityF: '',
         maxCapacity: '',
         status: 'upcoming',
         imgURL: '',
@@ -105,19 +103,16 @@ const OfferEdit = (props) => {
             
         }
 
-        exit(eventID);
+        exit();
     }
 
-    const exit = (eventID) => {
-        if (eventID === 'new')
-            navigate("/brand/events");
-        else
-            navigate("/brand/events");
+    const exit = () => {
+        navigate("/brand/events");
     }
 
     return (
         <div className="center container two-columns">
-            <h1>{eventID === 'new' ? "Dodaj event" : "Edytuj event"}</h1><br/>
+            <h1>{eventID === 'new' ? translate("add_event") : translate("edit_event")}</h1><br/>
             <div className="form"> 
                 <label>{translate("name")}</label><br/>
                 <input type="text" defaultValue={event.name} id="name-input" onChange={e => event.name = e.target.value}/><br/>

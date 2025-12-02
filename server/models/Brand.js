@@ -20,14 +20,17 @@ module.exports = (sequelize, DataTypes) => {
     Brand.associate = (models) => {
     Brand.belongsTo(models.User, {
       foreignKey: "userID",
+      onDelete: "CASCADE"
     });
     Brand.hasMany(models.Event, {
       foreignKey: "brandID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })
     Brand.hasMany(models.Product, {
       foreignKey: "brandID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })};
 
     return Brand

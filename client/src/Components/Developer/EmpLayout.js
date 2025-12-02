@@ -21,8 +21,8 @@ const EmpLayout = (props) => {
       .then(data => {
             props.setUser({
             id: data.id,
+            userID: data.userID,
             email: data.User.email,
-            password: data.User.password,
             name: data.User.name,
             role: data.role,
             salary: data.salary
@@ -42,11 +42,11 @@ const EmpLayout = (props) => {
             </header>
             <nav>
                 <div className="global-actions inline">
-                    <Link to="clients" className="tab">{translate("clients")}</Link>
-                    <Link to="brands" className="tab">{translate("brands")}</Link>
-                    <Link to="articles" className="tab">{translate("articles")}</Link>
+                    <Link to="clients" id="clients" className="tab">{translate("clients")}</Link>
+                    <Link to="brands" id="brands" className="tab">{translate("brands")}</Link>
+                    <Link to="articles" id="articles" className="tab">{translate("articles")}</Link>
                     {props.user.role === "admin" && (
-                        <Link to="employees" className="tab">{translate("employees")}</Link>
+                        <Link to="employees" id="employees" className="tab">{translate("employees")}</Link>
                     )}
                 </div>
                 <div className="global-actions inline align-right">

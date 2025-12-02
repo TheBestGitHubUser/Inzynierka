@@ -37,11 +37,13 @@ module.exports = (sequelize, DataTypes) => {
 
     Article.associate = (models) =>{
         Article.belongsTo(models.Developer,{
-            foreignKey: "developerID"
+            foreignKey: "developerID",
+            onDelete: "CASCADE"
         })
         Article.hasMany(models.Comment, {
         foreignKey: "articleID",
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
         })
     }
 

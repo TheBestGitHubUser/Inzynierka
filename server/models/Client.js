@@ -27,23 +27,28 @@ module.exports = (sequelize, DataTypes) => {
     Client.associate = (models) => {
     Client.belongsTo(models.User, {
       foreignKey: "userID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     });
     Client.hasMany(models.Participation, {
       foreignKey: "clientID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })
     Client.hasMany(models.Order, {
       foreignKey: "clientID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })
     Client.hasMany(models.Comment, {
       foreignKey: "clientID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })
     Client.hasMany(models.Review, {
       foreignKey: "clientID",
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     })
 
     };

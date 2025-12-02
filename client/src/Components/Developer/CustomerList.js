@@ -9,11 +9,17 @@ const CustomerList = () => {
     const [searched, setSearched] = useState('');
 
     useEffect(() => {
-        fetch("http://localhost:3001/getClients")
+        fetch("http://localhost:3001/getClients",{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setCustomers(data
-                    .filter(c => c.User.name.includes(searched) || c.email.includes(searched) || c.id+''===searched)
+                    .filter(c => c.User.name.includes(searched) || c.User.email.includes(searched) || c.id+''===searched)
                 )
             });
     }, [searched]);

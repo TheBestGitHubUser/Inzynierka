@@ -36,6 +36,7 @@ import BrandsProducts from './Components/Developer/BrandsProducts'
 import BrandsEvents from './Components/Developer/BrandsEvents'
 import Employees from './Components/Developer/Employees';
 import EmployeeEdit from './Components/Developer/EmployeeEdit';
+import EmployeesEditProfile from './Components/Developer/EditProfile'
 import ClientParticipation from './Components/Developer/ClientParticipations';
 import ClientOrders from './Components/Developer/ClientOrders';
 
@@ -53,6 +54,7 @@ import BrandOrders from './Components/Brand/Orders'
 import BrandOrderEdit from './Components/Brand/OrderEdit'
 import BrandReviews from './Components/Brand/Reviews'
 import BrandProfile from './Components/Brand/BrandProfile';
+
 
 
 
@@ -119,7 +121,8 @@ function App() {
                     </Route>
 
                     <Route path='employees' element={<Employees user={user}/>}/>
-                    <Route path='employees/:developerID' element={<EmployeeEdit/>}/>
+                    <Route path='employees/new' element={<EmployeeEdit/>}/>
+                    <Route path='employees/edit/:developerID' element={<EmployeesEditProfile user={user}/>}/>
 
                     <Route path='articles' element={<Articles user={user}/>}/>
                     <Route path='articles/:articleID' element={<ArticleEdit user={user}/>}/>

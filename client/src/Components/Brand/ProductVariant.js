@@ -123,6 +123,7 @@ const ProductVariant = (props) => {
                 <label>{translate("size")}</label><br />
                 <input
                     type="text"
+                    id="size-input"
                     placeholder="np. M, L, XL, one-size"
                     onChange={e => variant.size = e.target.value}
                 /><br />
@@ -130,6 +131,7 @@ const ProductVariant = (props) => {
                 <label>{translate("stock")}</label><br/>
                 <input
                     type="number"
+                    id="stock-input"
                     onChange={e => variant.stock = e.target.value}
                 /><br/>
                 <br/>

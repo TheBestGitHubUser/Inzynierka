@@ -49,7 +49,6 @@ const ArticleEdit = (props) => {
                 body: JSON.stringify(article)
             })
                 .then(res => res.json())
-                .then(data => data.insertId)
                 .catch(err => alert(translate("operation_unsuccessful")));
 
 

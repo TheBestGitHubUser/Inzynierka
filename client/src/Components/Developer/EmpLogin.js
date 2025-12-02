@@ -19,17 +19,21 @@ const EmpLogin = (props) => {
             return;
         }
 
-        fetch("http://localhost:3001/developer/" + employee.email+"/"+employee.password)
+        fetch("http://localhost:3001/developer/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(employee)
+        })
             .then(res => res.json())
             .then(data => {
-                if (data.dev === undefined || data.token ===undefined || data.dev.User.password !== employee.password) {
+                if (data.dev === undefined || data.token ===undefined) {
                     setWarning(translate("incorrect_email_or_pass"))
                 } else {
                     localStorage.setItem("token", data.token);
                     props.setUser({
                         id: data.dev.id,
+                        userID: data.dev.userID,
                         email: data.dev.User.email,
-                        password: data.dev.User.password,
                         name: data.dev.User.name,
                         role: data.dev.role,
                         salary: data.dev.salary

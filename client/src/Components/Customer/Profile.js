@@ -15,7 +15,7 @@ const Profile = (props) => {
         <div className="center container">
             <h1>{props.user.User?.name}</h1>
             <strong>email:</strong>{props.user.User?.email}<br/>
-            <Link to={"edit"}>zmień dane</Link><br/><br/>
+            <Link to={"edit"}>{translate("edit_profile")}</Link><br/><br/>
             <button onClick={() => navigate("purchases")}>{translate("user_purchases")}</button>
             <button onClick={() => navigate("competition")}>{translate("user_tournaments")}</button><br/>
             <Outlet/>

@@ -60,7 +60,7 @@ const EventList = (props) => {
         <div className="center container">
             <h1>{translate("events")}</h1>
             <SearchBar setSearched={setSearched}/><br/>
-            <Link to="new">{translate("add_event")}</Link><br/>
+            <Link id="new" to="new">{translate("add_event")}</Link><br/>
             <table>
                 <thead>
                 <tr>

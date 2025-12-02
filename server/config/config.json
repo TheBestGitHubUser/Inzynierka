@@ -8,8 +8,8 @@
   },
   "test": {
     "username": "root",
-    "password": null,
-    "database": "database_test",
+    "password": "Diament11",
+    "database": "inz_test",
     "host": "localhost",
     "dialect": "mysql"
   },

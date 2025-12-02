@@ -42,7 +42,8 @@ const ProfileEdit = (props) => {
             }
         }
 
-        fetch("http://localhost:3001/editProfile/" + props.user.User.id, {
+        try{
+            const res = await fetch("http://localhost:3001/editProfile/" + props.user.User.id, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -50,22 +51,26 @@ const ProfileEdit = (props) => {
                 email: user.User.email
             })
         })
-            .catch(err => alert(translate("connection-error")));
 
-        props.user.name=user.User.name;
-        props.user.email=user.User.email;
-        navigate("/profile");
+            if (res.ok) { 
+                props.user.User.name=user.User.name;
+                props.user.User.email=user.User.email;
+                navigate("/profile");
+            } else { 
+                setWarning(translate("unknown_error"));
+            }
+
+            
+
+        }catch (err){
+            setWarning(translate("connection_error"));
+        }
     }
 
-    const editPassword = () => {
+    const editPassword = async () => {
         const current = document.getElementById("current-pass").value;
         const newPass = document.getElementById("new-pass").value;
         const rePass = document.getElementById("re-pass").value;
-
-        if (current !== user.User.password) {
-            setPassWarning(translate("incorrect_password"));
-            return;
-        }
 
         if (!validatePassword(newPass)) {
             setPassWarning(translate("password_invalid"))
@@ -77,15 +82,25 @@ const ProfileEdit = (props) => {
             return;
         }
 
-        fetch('http://localhost:3001/changePassword/' + props.user.User.id, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({password: newPass})
-        })
-            .catch(err => alert(translate("connection_error")))
+        try{
+            const res = await fetch('http://localhost:3001/changePassword/' + props.user.User.id, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    password: current,
+                    newPassword: newPass})
+            })
 
-        props.user.password = newPass;
-        navigate("/profile");
+            if(res.ok){
+                navigate("/profile");
+            }else{
+                setPassWarning(translate("Wrong password"));
+            }
+
+        }catch(err){
+            setPassWarning(translate("connection_error"));
+        }
+
     }
 
     return (

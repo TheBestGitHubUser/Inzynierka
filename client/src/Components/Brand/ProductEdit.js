@@ -91,7 +91,7 @@ const OfferEdit = (props) => {
                 <label>{translate("description")}</label><br/>
                 <input type="text" defaultValue={offer.description} id="description-input" onChange={e => offer.description = e.target.value}/><br/>
                 <label>{translate("category")}</label><br/>
-                <select value={offer.category} onChange={e => setOffer({...offer, category: e.target.value})}>
+                <select value={offer.category} id="category-input" onChange={e => setOffer({...offer, category: e.target.value})}>
                     <option value=''>{translate("choose category")}</option>
                     <option value='obuwie'>{translate("obuwie")}</option>
                     <option value='akcesoria'>{translate("akcesoria")}</option>

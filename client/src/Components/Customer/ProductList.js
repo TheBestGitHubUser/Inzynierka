@@ -53,10 +53,9 @@ const ProductList = (props) => {
         <>
         <div id="main">
             <div id="options" className="container">
-                <label htmlFor="sort_options"><h3>sortuj</h3></label>
+                <label htmlFor="sort_options"><h3>{translate("sort")}</h3></label>
                 <OfferSortOptions setSortOpt={setSortOpt}/>
-                <h3>filtry</h3>
-                cena<br/>
+                <h3>{translate("filter")}</h3>
                 <input type="number" placeholder={translate("from")} onChange={e => setPriceRangeFrom(parseInt(e.target.value))}/>
                 <input type="number" placeholder={translate("to")} onChange={e => setPriceRangeTo(parseInt(e.target.value))}/>
                 <br/>

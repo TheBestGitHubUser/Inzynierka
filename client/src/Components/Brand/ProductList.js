@@ -60,7 +60,7 @@ const ProductList = (props) => {
         <div className="center container">
             <h1>{translate("offers")}</h1>
             <SearchBar setSearched={setSearched}/><br/>
-            <Link to="new">{translate("add_offer")}</Link><br/>
+            <Link id="new" to="new">{translate("add_offer")}</Link><br/>
             <table>
                 <thead>
                 <tr>

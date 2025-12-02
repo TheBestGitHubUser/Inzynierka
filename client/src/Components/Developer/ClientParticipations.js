@@ -56,7 +56,7 @@ const ClientParticipation = (props) => {
                 <td>{compete.Event.name}</td>
                 <td>{new Date(compete.Event.date).toLocaleString()}</td>
                 <td>{compete.Event.status}</td>
-                <td>{compete.placement > 0 ? compete.placement : translate("not set")}</td>
+                <td>{compete.placement > 0 ? compete.placement : translate("not_set")}</td>
                 <td><a onClick={() => deleteParticipation(compete.id)} className="underlined">{translate("remove")}</a></td>
             </tr>
             </tbody>

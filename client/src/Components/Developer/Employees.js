@@ -35,7 +35,7 @@ const Employees = (props) => {
                 <td>{developer.User?.email}</td>
                 <td>{developer.role}</td>
                 <td>{developer.salary}</td>
-                <td><Link to={developer.id+""}>{translate("edit")}</Link> </td>
+                <td><Link to={'edit/'+developer.id+""}>{translate("edit")}</Link> </td>
                 <td>{developer.role==='admin'?'-': 
                     <a onClick={() => deleteDev(developer.User.id)} className="underlined">{translate("delete")}</a>} </td>
             </tr>
@@ -47,7 +47,7 @@ const Employees = (props) => {
         <div className="center container">
             <h1>{translate("developers")}</h1>
             <SearchBar setSearched={setSearched}/><br/>
-            <Link to="new">{translate("add_employee")}</Link><br/>
+            <Link id='new' to="new">{translate("add_employee")}</Link><br/>
             <table>
                 <thead>
                 <tr>

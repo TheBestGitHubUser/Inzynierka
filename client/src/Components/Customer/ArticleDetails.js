@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Warning from "../Warning";
 import NoPage from "../NoPage";
 import { useTranslation } from "react-i18next";
@@ -12,9 +12,13 @@ const ArticleDetails = (props) => {
   const [warning, setWarning] = useState("");
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const effectRan = useRef(false);
 
-  // 🔹 Pobranie danych artykułu + komentarzy
+  // Pobranie danych artykułu + komentarzy
   useEffect(() => {
+
+    if (!effectRan.current) {
+
     fetch("http://localhost:3001/getArticleDetails/" + articleID)
       .then((res) => res.json())
       .then((data) => setArticle(data))
@@ -30,7 +34,9 @@ const ArticleDetails = (props) => {
                 body: JSON.stringify({
                   id: articleID,
                 })
-    })  
+      })
+      effectRan.current = true;
+    }
   }, [articleID]);
 
   if (!article || !article.id) return <NoPage />;
@@ -56,7 +62,7 @@ const ArticleDetails = (props) => {
         if (!res.ok) throw new Error("Failed to add comment");
         setNewComment("");
         setWarning("");
-        // 🔄 Odśwież listę komentarzy
+        
         return fetch("http://localhost:3001/getComments/" + articleID);
       })
       .then((res) => res.json())
@@ -68,7 +74,7 @@ const ArticleDetails = (props) => {
   const commentList =
     comments.length > 0 ? (
       comments.map((comment) => (
-        <div key={comment.id} className="comment-box">
+        <div key={comment.id} className="review-box">
           <strong>{comment.Client?.User?.name || translate("anonymous")}</strong>
           <p style={{ marginTop: "5px" }}>{comment.content}</p>
           <span className="comment-date">
@@ -82,19 +88,19 @@ const ArticleDetails = (props) => {
 
   return (
     <div className="article-page container">
-      {/* LEWA SEKCJA */}
-      <div className="article-left">
-        <img
-          src={article.imgURL}
-          alt="article illustration"
-          className="article-image"
-        />
+      <div className="align-left">
         <h1>{article.title}</h1>
         <p className="article-meta">
           {translate("views")}: {article.views}
         </p>
+        <br/>
+        <img
+          src={article.imgURL}
+          alt="article illustration"
+          className="large-product-img"
+        />
         <p> {article.content}</p>
-
+        <br/>
         <h3 className="mt-4">{translate("author_info")}</h3>
         <p>
           <strong>{translate("author")}:</strong>{" "}
@@ -103,9 +109,9 @@ const ArticleDetails = (props) => {
 
         <Warning message={warning} />
       </div>
-
-      {/* PRAWA SEKCJA */}
-      <div className="article-right">
+      <br/>
+      <div className="align-left">
+      
         <h2>{translate("comments")}</h2>
         {commentList}
 

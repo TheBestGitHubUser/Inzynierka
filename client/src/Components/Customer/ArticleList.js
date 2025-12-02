@@ -35,7 +35,7 @@ const ArticleList = (props) => {
             <div className="container product-card" onClick={() => navigate(tour.id + "")} key={tour.id}>
                 <img src={tour.imgURL} alt="box art" className="product-img"/>
                 <h3>{tour.title}</h3>
-                views: {tour.views}
+                {translate("views")}: {tour.views}
             </div>
         );
     });

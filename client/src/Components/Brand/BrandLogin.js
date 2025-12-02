@@ -23,10 +23,14 @@ const BrandLogin = (props) => {
             return;
         }
 
-        const promise = fetch("http://localhost:3001/brand/" + brand.email+"/"+brand.password)
+        const promise = fetch("http://localhost:3001/brand", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(brand)
+        })
             .then(res => res.json())
             .then(data => {
-                if (data.brand === undefined || data.token ===undefined || data.brand?.User?.password !== brand.password) {
+                if (data.brand === undefined || data.token ===undefined ) {
                     setWarning(translate("incorrect_email_or_pass"))
                 } else {
                     
@@ -56,10 +60,10 @@ const BrandLogin = (props) => {
                 <h1>{translate("log_in_title")}</h1>
                 <input type="email" id="email" placeholder={translate("e-mail")} onChange={e => brand.email = e.target.value}/><br/>
                 <input type="password" id="password" placeholder={translate("password")} onChange={e => brand.password = e.target.value}/><br/>
-                <button onClick={checkLogin}>{translate("login")}</button>
+                <button id = 'login' onClick={checkLogin}>{translate("login")}</button>
                 <Warning message={warning}/><br/>
 
-                <Link to={"/brandregister"}>{translate("register")}</Link>
+                <Link id = 'register-link' to={"/brandregister"}>{translate("register")}</Link>
             </div>
         </>
     );

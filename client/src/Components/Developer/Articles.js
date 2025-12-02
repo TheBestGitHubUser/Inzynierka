@@ -9,7 +9,13 @@ const ArticleList = (props) => {
     const [searched, setSearched] = useState('');
 
     useEffect(() => {
-        fetch("http://localhost:3001/getDevArticles/"+ props.user.id)
+        fetch("http://localhost:3001/getDevArticles/"+ props.user.id,{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setArticles(data
@@ -19,9 +25,9 @@ const ArticleList = (props) => {
             .catch(err => alert(translate("operation_unsuccessful")));
     }, []);
 
-    const deleteOffer = (eventID) => {
+    const deleteArticle = (articleID) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteEvent/" + eventID, {method: "DELETE"})
+            fetch("http://localhost:3001/deleteArticle/" + articleID, {method: "DELETE"})
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }
@@ -35,7 +41,7 @@ const ArticleList = (props) => {
                 <td>{article.views}</td>
                 <td><Link to={"comments/"+article.id}>{translate("comments")}</Link> </td>
                 <td><Link to={article.id+"/"}>{translate("edit")}</Link></td>
-                <td><a onClick={() => deleteOffer(article.id)} className="underlined">{translate("delete")}</a></td>
+                <td><a onClick={() => deleteArticle(article.id)} className="underlined">{translate("delete")}</a></td>
             </tr>
             </tbody>
         );
@@ -45,7 +51,7 @@ const ArticleList = (props) => {
         <div className="center container">
             <h1>{translate("articles")}</h1>
             <SearchBar setSearched={setSearched}/><br/>
-            <Link to="new">{translate("add_article")}</Link><br/>
+            <Link id="new" to="new">{translate("add_article")}</Link><br/>
             <table>
                 <thead>
                 <tr>

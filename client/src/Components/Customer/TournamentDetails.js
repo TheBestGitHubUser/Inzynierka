@@ -68,8 +68,8 @@ const TournamentDetails = (props) => {
                 <h1>{event.name}</h1><br/>
                 <strong>{translate("organizer")}: </strong>{event.Brand?.User?.name || "Brak danych"}<br/>
                 <strong>{translate("place")}: </strong>{event.city}, {event.address}<br/>
-                <strong>{translate("starting time")}: </strong>{new Date(event.date).toLocaleString()}<br/><br/>
-                <strong>{translate("number of competitors")}: </strong><br/>
+                <strong>{translate("starting_time")}: </strong>{new Date(event.date).toLocaleString()}<br/><br/>
+                <strong>{translate("number_of_competitors")}: </strong><br/>
                 <strong>{translate("male")}: </strong>{competitorsM}/{event.maxCapacity}<br/>
                 <strong>{translate("female")}: </strong>{competitorsY}/{event.maxCapacity}<br/><br/>
                 <strong>{translate("status")}: </strong>{event.status}<br/>
@@ -81,7 +81,7 @@ const TournamentDetails = (props) => {
                     (props.user.gender === "M" && competitorsM >= event.maxCapacity) ||
                     (props.user.gender === "F" && competitorsY >= event.maxCapacity)
                  }>
-                    {translate("sign up")}</button><br/>
+                    {translate("sign_up")}</button><br/>
             
             </div>
         </div>

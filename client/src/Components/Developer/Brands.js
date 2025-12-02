@@ -9,11 +9,17 @@ const Brands = () => {
     const [searched, setSearched] = useState('');
 
     useEffect(() => {
-        fetch("http://localhost:3001/getBrands")
+        fetch("http://localhost:3001/getBrands",{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setBrands(data
-                    .filter(c => c.User.name.includes(searched) || c.email.includes(searched) || c.id+''===searched)
+                    .filter(c => c.User.name.includes(searched) || c.User.email.includes(searched) || c.id+''===searched)
                 )
             });
     }, [searched]);

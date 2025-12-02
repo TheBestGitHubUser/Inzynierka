@@ -22,10 +22,14 @@ const Login = (props) => {
             return;
         }
 
-        const promise = fetch("http://localhost:3001/client/" + customer.email+"/"+customer.password)
+        const promise = fetch("http://localhost:3001/client", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(customer)
+        })
             .then(res => res.json())
             .then(data => {
-                if (data.user === undefined || data.token === undefined || data.user?.User?.password !== customer.password) {
+                if (data.user === undefined || data.token === undefined) {
                     setWarning(translate("incorrect_email_or_pass"));
                 } else {
                     localStorage.setItem("token", data.token);
@@ -41,11 +45,11 @@ const Login = (props) => {
             <h1>{translate("log_in_title")}</h1>
             <input type="email" id="email" placeholder={translate("e-mail")} onChange={e => customer.email = e.target.value}/><br/>
             <input type="password" id="password" placeholder={translate("password")} onChange={e => customer.password = e.target.value}/><br/>
-            <button onClick={checkLogin}>{translate("login")}</button>
+            <button id="login" onClick={checkLogin}>{translate("login")}</button>
             <Warning message={warning}/><br/>
-            <Link to={"/register"}>{translate("register")}</Link><br/>
-            <Link to={"/brandlogin"}>{translate("brand_platform")}</Link><br/>
-            <Link to={"/emplogin"}>{translate("employee_platform")}</Link>
+            <Link id="register-link" to={"/register"}>{translate("register")}</Link><br/>
+            <Link id="brand-link" to={"/brandlogin"}>{translate("brand_platform")}</Link><br/>
+            <Link id="developer-link" to={"/emplogin"}>{translate("employee_platform")}</Link>
         </div>
     );
 }

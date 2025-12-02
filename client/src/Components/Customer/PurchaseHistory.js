@@ -54,7 +54,7 @@ const PurchaseHistory = (props) => {
             <table>
                 <thead>
                 <tr>
-                    <th>{translate("title")}</th>
+                    <th>{translate("name")}</th>
                     <th>{translate("category")}</th>
                     <th>{translate("price")}</th>
                     <th>{translate("size")}</th>

@@ -42,14 +42,14 @@ const Layout = (props) => {
             </header>
             <nav>
             <div className="global-actions inline">
-                    <Link to="" className="tab">{translate("shop")}</Link>
-                    <Link to="tournament" className="tab">{translate("tournaments")}</Link>
-                    <Link to="article" className="tab">{translate("article")}</Link>
+                    <Link id="shop" to="" className="tab">{translate("shop")}</Link>
+                    <Link id="events" to="tournament" className="tab">{translate("events")}</Link>
+                    <Link id="articles" to="article" className="tab">{translate("articles")}</Link>
                 </div>
                 <div className="global-actions inline align-right">
                     {
                         props.user?.id === undefined || props.user?.id === ''?
-                        <button onClick={() => navigate("/login")}>{translate("login")}</button> :
+                        <button name="login" onClick={() => navigate("/login")}>{translate("login")}</button> :
                         <button onClick={() => navigate("/profile")}>{translate("profile")}</button>
                     }
                     {

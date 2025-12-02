@@ -23,7 +23,7 @@ const Comments = () => {
       <h1>
         {translate("comments_for_article")} #{articleID}
       </h1>
-      <Link to="/dev/articles">{translate("back_to_articles")}</Link>
+      <Link to="/emp/articles">{translate("back_to_articles")}</Link>
       <br />
       <br />
 
@@ -33,19 +33,9 @@ const Comments = () => {
         comments.map((comment) => (
           <div
             key={comment.id}
-            className="comment-box"
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "10px",
-              padding: "10px",
-              marginBottom: "10px",
-              backgroundColor: "#f9f9f9",
-              textAlign: "left",
-              width: "70%",
-              marginInline: "auto",
-            }}
+            className="review-box"
           >
-            <strong>{comment.User?.name || translate("anonymous")}</strong>
+            <strong>{comment.Client?.User?.name || translate("anonymous")}</strong>
             <p style={{ marginTop: "5px" }}>{comment.content}</p>
             <span style={{ fontSize: "0.9em", color: "gray" }}>
               {new Date(comment.createdAt).toLocaleString()}

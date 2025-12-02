@@ -16,7 +16,7 @@ const Purchase = (props) => {
         productID: offerID,
         name: '',
         surname: '',
-        size: variant.size,
+        productVariantID: variantID,
         price: product.price,
         address: '',
         status: 'pending'
@@ -60,17 +60,6 @@ const Purchase = (props) => {
             setWarning(translate("enter_address"))
             return;
         }
-
-
-
-        fetch("http://localhost:3001/postProductVariant/" + variantID, {
-                method: "POST",
-                headers: {'Content-Type': 'application/json',
-                     "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({stock: variant.stock-1})
-            })
-            .catch(err => alert(translate("operation_unsuccessful")));
 
         
         fetch("http://localhost:3001/putOrder", {

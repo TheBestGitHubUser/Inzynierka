@@ -66,7 +66,7 @@ const Orders = (props) => {
                 <thead>
                 <tr>
                     <th>id</th>
-                    <th>{translate("name")}</th>
+                    <th>{translate("firstname")}</th>
                     <th>{translate("surname")}</th>
                     <th>{translate("size")}</th>
                     <th>{translate("price")}</th>

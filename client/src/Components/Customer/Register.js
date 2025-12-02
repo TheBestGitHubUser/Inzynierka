@@ -78,11 +78,11 @@ const Register = () => {
     return (
         <div id="login-window" className="container">
             <h1>{translate("register_title")}</h1>
-            <input type="text" placeholder={translate("name")} onChange={e => customer.name = e.target.value}/><br/>
-            <input type="email" placeholder={translate("e-mail")} onChange={e => customer.email = e.target.value}/><br/>
-            <input type="password" placeholder={translate("password")} onChange={e => customer.password = e.target.value}/><br/>
-            <input type="password" placeholder={translate("repeat_password")} onChange={e => customer.rePass = e.target.value}/><br/>
-            <input type="date" onChange={e => customer.birthDate = e.target.value}></input>
+            <input id = "name" type="text" placeholder={translate("name")} onChange={e => customer.name = e.target.value}/><br/>
+            <input id = "email" type="email" placeholder={translate("e-mail")} onChange={e => customer.email = e.target.value}/><br/>
+            <input id = "password" type="password" placeholder={translate("password")} onChange={e => customer.password = e.target.value}/><br/>
+            <input id = "re-password" type="password" placeholder={translate("repeat_password")} onChange={e => customer.rePass = e.target.value}/><br/>
+            <input id = "birthdate" type="date" onChange={e => customer.birthDate = e.target.value}></input>
             <select type="text" id="selectGender" onChange={
                 e => {var d = document.getElementById("selectGender")
                 var value = d.value

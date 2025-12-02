@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Warning from "../Warning";
 import { validateEmail, validateName, validatePassword } from "../../Utils";
 import { useTranslation } from "react-i18next";
@@ -7,10 +7,8 @@ import { useTranslation } from "react-i18next";
 const EmployeeEdit = () => {
     const navigate = useNavigate();
     const [translate, i18n] = useTranslation("global");
-    const {developerID} = useParams()
 
     const [developer, setDeveloper] = useState({
-        id: developerID,
         userID: '',
         name: "",
         email: "",
@@ -21,24 +19,6 @@ const EmployeeEdit = () => {
     });
 
     const [warning, setWarning] = useState("");
-
-    useEffect(() => {
-    if (developerID !== "new") {
-      fetch("http://localhost:3001/getDeveloper/" + developerID)
-        .then((res) => res.json())
-        .then((data) => setDeveloper({
-            id: developerID,
-            userID: data.userID,
-            name: data.User.name,
-            email: data.User.email,
-            password: data.User.password,
-            rePass: data.User.password,
-            role: data.role,
-            salary: data.salary,
-        }))
-        .catch(() => alert(translate("operation_unsuccessful")));
-    }
-  }, [developerID, translate]);
 
     const register = async () => {
         developer.name = developer.name.trim();
@@ -85,7 +65,7 @@ const EmployeeEdit = () => {
             return;
         }
 
-        if(developerID ==="new"){
+        
                 const devs = await fetch("http://localhost:3001/getDevelopers")
                 .then((res) => res.json())
                 .catch(() => {
@@ -108,17 +88,7 @@ const EmployeeEdit = () => {
                         .then(() => navigate("/emp/employees"))
                         .catch(() => alert(translate("operation_unsuccessful")));
                 
-        }else{
-
-            fetch("http://localhost:3001/postDeveloper", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(developer),
-                    })
-                        .then(() => navigate("/emp/employees"))
-                        .catch(() => alert(translate("operation_unsuccessful")));
-
-        }
+       
         navigate('/emp/employees')
 
         
@@ -129,6 +99,7 @@ const EmployeeEdit = () => {
             <h1>{translate("register_dev_title")}</h1>
             <input
                 type="text"
+                id="name-input"
                 defaultValue={developer.name}
                 placeholder={translate("name")}
                 onChange={(e) => (developer.name = e.target.value)}
@@ -136,6 +107,7 @@ const EmployeeEdit = () => {
             <br />
             <input
                 type="email"
+                id="email-input"
                 defaultValue={developer.email}
                 placeholder={translate("e-mail")}
                 onChange={(e) => (developer.email = e.target.value)}
@@ -143,6 +115,7 @@ const EmployeeEdit = () => {
             <br />
             <input
                 type="password"
+                id="password-input"
                 defaultValue={developer.password}
                 placeholder={translate("password")}
                 onChange={(e) => (developer.password = e.target.value)}
@@ -150,6 +123,7 @@ const EmployeeEdit = () => {
             <br />
             <input
                 type="password"
+                id="re-password-input"
                 defaultValue={developer.password}
                 placeholder={translate("repeat_password")}
                 onChange={(e) => (developer.rePass = e.target.value)}
@@ -174,13 +148,14 @@ const EmployeeEdit = () => {
             <br />
             <input
                 type="number"
+                id="salary-input"
                 defaultValue={developer.salary}
                 placeholder={translate("salary")}
                 onChange={(e) => (developer.salary = e.target.value)}
             />
             <br />
 
-            <button onClick={() => register()}>{developerID === 'new'?translate("register"):translate("save")}</button>
+            <button onClick={() => register()}>{translate("register")}</button>
             <Warning message={warning} />
         </div>
     );

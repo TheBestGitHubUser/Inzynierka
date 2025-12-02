@@ -42,9 +42,9 @@ const EmpLayout = (props) => {
             </header>
             <nav>
                 <div className="global-actions inline">
-                    <Link to="products" className="tab">{translate("products")}</Link>
-                    <Link to="orders" className="tab">{translate("orders")}</Link>
-                    <Link to="events" className="tab">{translate("events")}</Link>
+                    <Link to="products" id='products' className="tab">{translate("products")}</Link>
+                    <Link to="orders" id='orders' className="tab">{translate("orders")}</Link>
+                    <Link to="events" id='events' className="tab">{translate("events")}</Link>
                     
                 
                 </div>

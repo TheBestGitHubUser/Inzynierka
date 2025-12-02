@@ -54,7 +54,7 @@ const OrderEdit = (props) => {
         <div className="center container two-columns">
             <h1>{translate('edit_order')}</h1><br/>
             <div className="form"> 
-                <label>{translate("name")}</label><br/>
+                <label>{translate("firstname")}</label><br/>
                 <input type="text" defaultValue={order.name} id="name-input" onChange={e => order.name = e.target.value}/><br/>
                 <label>{translate("surname")}</label><br/>
                 <input type="text" defaultValue={order.surname} id="name-input" onChange={e => order.surname = e.target.value}/><br/>
@@ -65,7 +65,7 @@ const OrderEdit = (props) => {
                 <label>{translate("address")}</label><br/>
                 <input type="text" defaultValue={order.address} id="description-input" onChange={e => order.address = e.target.value}/><br/>
                 <label>{translate("category")}</label><br/>
-                <select value={order.status} onChange={e => setOrder({...order, status: e.target.value})}>
+                <select id="statusSelect" value={order.status} onChange={e => setOrder({...order, status: e.target.value})}>
                     <option value='pending'>{translate("pending")}</option>
                     <option value='processing'>{translate("processing")}</option>
                     <option value='completed'>{translate("completed")}</option>

@@ -27,7 +27,15 @@ const BrandProfile = (props) => {
             return;
         }
 
-        const customers = await fetch("http://localhost:3001/getBrands")
+        const customers = await fetch("http://localhost:3001/getBrands",
+            {
+                method: 'GET',
+                headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+            }
+        )
             .then(res => res.json())
             .then(data => data.filter(u => u.id !== user.id))
 
@@ -42,27 +50,35 @@ const BrandProfile = (props) => {
             }
         }
 
-        fetch("http://localhost:3001/editProfile/" + props.user.userID, {
+        try{
+            const res = await fetch("http://localhost:3001/editProfile/" + props.user.userID, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(user)
+            body: JSON.stringify({
+                name: user.name,
+                email: user.email
+            })
         })
-            .catch(err => alert(translate("connection-error")));
 
-        props.user.name=user.name;
-        props.user.email=user.email;
-        navigate("/brand");
+            if (res.ok) { 
+                props.user.name=user.name;
+                props.user.email=user.email;
+                navigate("/brand");
+            } else { 
+                setWarning(translate("unknown_error"));
+            }
+
+
+        }catch (err){
+            setWarning(translate("connection_error"));
+        }
     }
 
-    const editPassword = () => {
+    const editPassword = async () => {
         const current = document.getElementById("current-pass").value;
         const newPass = document.getElementById("new-pass").value;
         const rePass = document.getElementById("re-pass").value;
 
-        if (current !== user.password) {
-            setPassWarning(translate("incorrect_password"));
-            return;
-        }
 
         if (!validatePassword(newPass)) {
             setPassWarning(translate("password_invalid"))
@@ -74,15 +90,24 @@ const BrandProfile = (props) => {
             return;
         }
 
-        fetch('http://localhost:3001/changePassword/' + props.user.userID, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({password: newPass})
-        })
-            .catch(err => alert(translate("connection_error")))
+        try{
+            const res = await fetch('http://localhost:3001/changePassword/' + props.user.userID, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    password: current,
+                    newPassword: newPass})
+            })
 
-        props.user.password = newPass;
-        navigate("/brand");
+            if(res.ok){
+                navigate("/brand");
+            }else{
+                setPassWarning(translate("Wrong password"));
+            }
+
+        }catch(err){
+            setPassWarning(translate("connection_error"));
+        }
     }
 
     return (

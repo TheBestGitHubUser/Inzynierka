@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     Developer.associate = (models) => {
     Developer.belongsTo(models.User, {
       foreignKey: "userID",
+      onDelete: "CASCADE",
     });
     Developer.hasMany(models.Article, {
       foreignKey: "developerID",

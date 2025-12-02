@@ -69,11 +69,11 @@ const Register = () => {
     return (
         <div id="login-window" className="container">
             <h1>{translate("register_title")}</h1>
-            <input type="text" placeholder={translate("name")} onChange={e => brand.name = e.target.value}/><br/>
-            <input type="email" placeholder={translate("e-mail")} onChange={e => brand.email = e.target.value}/><br/>
-            <input type="password" placeholder={translate("password")} onChange={e => brand.password = e.target.value}/><br/>
-            <input type="password" placeholder={translate("repeat_password")} onChange={e => brand.rePass = e.target.value}/><br/>
-            <input type="text" placeholder={translate("nip_number")} onChange={e => brand.nipNumber = e.target.value}></input><br/>
+            <input id="name" type="text" placeholder={translate("name")} onChange={e => brand.name = e.target.value}/><br/>
+            <input id="email" type="email" placeholder={translate("e-mail")} onChange={e => brand.email = e.target.value}/><br/>
+            <input id="password" type="password" placeholder={translate("password")} onChange={e => brand.password = e.target.value}/><br/>
+            <input id="re-password" type="password" placeholder={translate("repeat_password")} onChange={e => brand.rePass = e.target.value}/><br/>
+            <input id="nip" type="text" placeholder={translate("nip_number")} onChange={e => brand.nipNumber = e.target.value}></input><br/>
             <button onClick={() => register()}>{translate("register")}</button>
             <Warning message={warning}/>
         </div>
