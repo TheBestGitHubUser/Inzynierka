@@ -13,7 +13,7 @@ const EmpPurchaseHistory = () => {
         fetch("http://localhost:3001/user_purchases/" + customerId)
             .then(res => res.json())
             .then(data => setPurchases(data.sort((p1,p2) => sortPurchases(p1,p2,sortOpt))));
-    }, [sortOpt]);
+    }, [sortOpt,purchases]);
 
     const deletePurchase = (purchaseId) => {
         if (window.confirm(translate("purchase_delete_confirm")) === true) {

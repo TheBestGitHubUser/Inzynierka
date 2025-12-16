@@ -69,8 +69,8 @@ const OfferEdit = (props) => {
             return;
         }
 
-        if (event.maxCapacity === '') {
-            setWarning(translate("enter_maxCapacity"))
+        if (event.maxCapacity <= 1) {
+            setWarning(translate("capacity_has_to_be_greater_than_1"))
             return;
         }
         

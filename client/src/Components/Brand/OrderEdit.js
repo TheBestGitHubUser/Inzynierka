@@ -66,7 +66,7 @@ const OrderEdit = (props) => {
                 <input type="text" defaultValue={order.address} id="description-input" onChange={e => order.address = e.target.value}/><br/>
                 <label>{translate("category")}</label><br/>
                 <select id="statusSelect" value={order.status} onChange={e => setOrder({...order, status: e.target.value})}>
-                    <option value='pending'>{translate("pending")}</option>
+                    <option value='pending' disabled = {order.status!=='pending'}>{translate("pending")}</option>
                     <option value='processing'>{translate("processing")}</option>
                     <option value='completed'>{translate("completed")}</option>
                 </select>

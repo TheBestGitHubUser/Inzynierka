@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {OfferSortOptions, sortOffers} from "../OfferSortOptions";
 import {useTranslation} from "react-i18next";
 import Pagination from "../Pagination"
+import { CATEGORIES } from "../Constans";
 
 const ProductList = (props) => {
     const navigate = useNavigate();
@@ -61,17 +62,19 @@ const ProductList = (props) => {
                 <br/>
                 <select onChange={e => setCategory(e.target.value)}>
                     <option value="">{translate("all")}</option>
-                    <option value="obuwie">{translate("shoes")}</option>
-                    <option value="akcesoria">{translate("accessories")}</option>
-                    <option value="przyrzad">{translate("devices")}</option>
-                    <option value="odziez">{translate("clothing")}</option>
+                    {CATEGORIES.map((option)=>
+                        <option value={option.value}>
+                            {translate(option.label)}
+                        </option>
+                    )}
                 </select>
             </div>
             <div id="product-list">
                 {productList}
             </div>
             </div>
-        <div><Pagination totalPosts = {products.length} postPerPage = {postPerPage}
+        <div className="center">
+            <Pagination totalPosts = {products.length} postPerPage = {postPerPage}
                 setCurrentPage={setCurrentPage} currentPage = {currentPage}/></div>  
         </>
         

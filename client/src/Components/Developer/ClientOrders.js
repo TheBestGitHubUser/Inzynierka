@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 import {PurchaseSortOptions, sortPurchases} from "../PurchaseSortOptions";
 import {useTranslation} from "react-i18next";
 
@@ -8,9 +8,10 @@ const ClientOrders = (props) => {
     const [purchases, setPurchases] = useState([]);
     const {clientID} = useParams();
     const [sortOpt, setSortOpt] = useState(0);
+    const navigate = useNavigate()
 
-    useEffect(() => {
-        fetch("http://localhost:3001/getClientOrders/" + clientID, {
+    const getOrders = async ()=>{
+        await fetch("http://localhost:3001/getClientOrders/" + clientID, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -22,17 +23,24 @@ const ClientOrders = (props) => {
                     return res.json();
             })
             .then(data => setPurchases(data.sort((p1, p2) => sortPurchases(p1, p2, sortOpt))));
-    }, [sortOpt]);
+    }
 
-    const deleteOffer = (orderID) => {
+    useEffect(() => {
+        getOrders()
+    }, [sortOpt,purchases]);
+
+    const deleteOffer = async (orderID) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteOrder/" + orderID, {
+            await fetch("http://localhost:3001/deleteOrder/" + orderID, {
                 method: "DELETE",
                 headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
             })
+                .then(()=>{
+                    getOrders()
+                })
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }

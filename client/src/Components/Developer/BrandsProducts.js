@@ -24,7 +24,7 @@ const BrandsProducts = (props) => {
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, []);
+    }, [searched,offers]);
 
     const deleteOffer = (offerId) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {

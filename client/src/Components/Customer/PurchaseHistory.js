@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {json, Link} from "react-router-dom";
 import {PurchaseSortOptions, sortPurchases} from "../PurchaseSortOptions";
 import {useTranslation} from "react-i18next";
 
@@ -8,7 +8,7 @@ const PurchaseHistory = (props) => {
     const [purchases, setPurchases] = useState([]);
     const [sortOpt, setSortOpt] = useState(0);
 
-    useEffect(() => {
+    const getPurchases = ()=>{
         fetch("http://localhost:3001/getClientOrders/" + props.user.id, {
             method: 'GET',
             headers: {
@@ -21,7 +21,31 @@ const PurchaseHistory = (props) => {
                     return res.json();
             })
             .then(data => setPurchases(data.sort((p1, p2) => sortPurchases(p1, p2, sortOpt))));
+    }
+
+    useEffect(() => {
+        getPurchases()
     }, [sortOpt]);
+
+    const cancelOrder = (orderID,status) => {
+        if (window.confirm(translate("offer_delete_confirm")) === true) {
+            fetch("http://localhost:3001/cancelOrder", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+                body: JSON.stringify({
+                    id: orderID,
+                    status: status==="pending"?"canceled":"returned"
+                })
+            })
+                .then(()=>{
+                    getPurchases()
+                })
+                .catch(err => alert(translate("operation_unsuccessful")));
+        }
+    }
 
     const purchaseList = purchases.map((purchase) => {
         return (
@@ -29,7 +53,7 @@ const PurchaseHistory = (props) => {
             <tr>
                 <td>{purchase.Product?.name}</td>
                 <td>{purchase.Product?.category}</td>
-                <td>{purchase.price}</td>
+                <td>{purchase.price} zł</td>
                 <td>{purchase.size}</td>
                 <td>{purchase.status}</td>
                 <td>{new Date(purchase.createdAt).toLocaleString()}</td>
@@ -40,6 +64,13 @@ const PurchaseHistory = (props) => {
                     ) : (
                       "-"
                     )}
+                </td>
+                <td>
+                        
+                        
+                        {purchase.status==="pending"?<a onClick={() => cancelOrder(purchase.id,purchase.status)} className="underlined">{translate("cancel_order")}</a>:
+                    purchase.status==="completed"?<a onClick={() => cancelOrder(purchase.id,purchase.status)} className="underlined">{translate("return_product")}</a>:"-"}
+                        
                 </td>
                 <td><Link to={"/" + purchase.Product.id}>{translate("offer_page")}</Link></td>
             </tr>
@@ -61,6 +92,7 @@ const PurchaseHistory = (props) => {
                     <th>{translate("status")}</th>
                     <th>{translate("purchase_time")}</th>
                     <th>{translate("add_review")}</th>
+                    <th>{translate("activities")}</th>
                     <th>{translate("url")}</th>
                 </tr>
                 </thead>

@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 const EditProfile = (props) => {
     const navigate = useNavigate();
     const [translate, i18n] = useTranslation("global");
-    const {developerID} = useParams()
     
     const [user, setUser] = useState({
         id: '',
@@ -22,7 +21,7 @@ const EditProfile = (props) => {
     const [passWarning, setPassWarning] = useState('');
 
     useEffect(() => {
-        fetch("http://localhost:3001/getDeveloper/" + developerID, {
+        fetch("http://localhost:3001/getDeveloper/" + props.user.id, {
             headers: { Authorization: "Bearer " + localStorage.getItem('token') },
     })
       .then(res => res.json())
@@ -38,7 +37,7 @@ const EditProfile = (props) => {
       })
       .catch(translate("connection_error"))
         if (!localStorage.getItem('token'))
-            navigate("/brandLogin");
+            navigate("/empLogin");
     }, []);
 
     const editUserData = async () => {
@@ -90,41 +89,6 @@ const EditProfile = (props) => {
         }
     }
 
-    const editDevData = async () => {
-        if (user.salary <=0) {
-            setDetailsWarning(translate("negative salary"));
-            return;
-        }
-
-        if (user.role.length <=0) {
-            setDetailsWarning(translate("chose_a_role"));
-            return;
-        }
-        try{
-            const res = await fetch("http://localhost:3001/postDeveloper", {
-            method: "POST",
-            headers: {'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + localStorage.getItem("token") },
-            body: JSON.stringify({
-                id: user.id,
-                salary: user.salary,
-                role: user.role,
-            })
-        })
-
-            if (res.ok) { 
-                navigate("/emp/employees");
-            } else { 
-                setDetailsWarning(translate("unknown_error"));
-            }
-
-            
-
-        }catch (err){
-            setDetailsWarning(translate("connection_error"));
-        }
-    }
-
     const editPassword = async () => {
         const current = document.getElementById("current-pass").value;
         const newPass = document.getElementById("new-pass").value;
@@ -151,7 +115,7 @@ const EditProfile = (props) => {
             })
 
             if(res.ok){
-                navigate("/emp/employees");
+                navigate("/emp");
             }else{
                 setPassWarning(translate("Wrong password"));
             }
@@ -169,28 +133,6 @@ const EditProfile = (props) => {
                 <input type="email" placeholder={translate("e-mail")} defaultValue={user.email} onChange={e => user.email = e.target.value}/><br/>
                 <button onClick={editUserData}>akceptuj</button>
                 <Warning message={warning}/>
-            </div>
-
-            <h1>{translate("edit_details")}</h1>
-            <div className="form">
-                <select
-                id="selectRole"
-                value={user.role}
-                onChange={(e) => setUser({...user,role: e.target.value})}
-                required
-            >
-                <option value="" selected disabled hidden>
-                    {translate("choose_role")}
-                </option>
-                <option value="admin">Admin</option>
-                <option value="junior">Junior</option>
-                <option value="mid">Mid</option>
-                <option value="senior">Senior</option>
-                <option value="lead">Lead</option>
-                 </select><br/>
-                <input type="text" placeholder={translate("salary")} defaultValue={user.salary} onChange={e => user.salary = e.target.value}/><br/>
-                <button onClick={editDevData}>akceptuj</button>
-                <Warning message={detailsWarning}/>
             </div>
 
             <h2>{translate("change_password")}</h2>

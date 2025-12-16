@@ -15,7 +15,7 @@ describe('buy product', () => {
     cy.contains("button","Kup")
     .click()
 
-    
+    cy.contains("Dziękujemy za dokonanie zakupu.")
     
   })
 })

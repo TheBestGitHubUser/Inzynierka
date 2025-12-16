@@ -14,20 +14,25 @@ const ArticleDetails = (props) => {
   const [newComment, setNewComment] = useState("");
   const effectRan = useRef(false);
 
-  // Pobranie danych artykułu + komentarzy
+  const getComments = () =>{
+    fetch("http://localhost:3001/getComments/" + articleID)
+      .then((res) => res.json())
+      .then((data) => setComments(data))
+      .catch((err) => alert(translate("connection_error")));
+  }
+
   useEffect(() => {
-
-    if (!effectRan.current) {
-
+    
     fetch("http://localhost:3001/getArticleDetails/" + articleID)
       .then((res) => res.json())
       .then((data) => setArticle(data))
       .catch((err) => alert(translate("connection_error")));
 
-    fetch("http://localhost:3001/getComments/" + articleID)
-      .then((res) => res.json())
-      .then((data) => setComments(data))
-      .catch((err) => alert(translate("connection_error")));
+    getComments()
+
+    if (!effectRan.current) {
+
+    
 
     fetch("http://localhost:3001/increaseViews", { method: "POST" 
       ,headers: {'Content-Type': 'application/json'},
@@ -37,7 +42,7 @@ const ArticleDetails = (props) => {
       })
       effectRan.current = true;
     }
-  }, [articleID]);
+  }, [newComment]);
 
   if (!article || !article.id) return <NoPage />;
 
@@ -60,6 +65,7 @@ const ArticleDetails = (props) => {
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to add comment");
+        getComments()
         setNewComment("");
         setWarning("");
         
@@ -119,6 +125,7 @@ const ArticleDetails = (props) => {
           <div className="add-comment">
             <textarea
               placeholder={translate("add_comment_placeholder")}
+              id="add-comment"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />

@@ -8,8 +8,8 @@ const EventList = (props) => {
     const [translate, i18n] = useTranslation("global");
     const [searched, setSearched] = useState('');
 
-    useEffect(() => {
-        fetch("http://localhost:3001/brandGetEvents/"+ props.user.id, {
+    const getEvents = async () => {
+        await fetch("http://localhost:3001/brandGetEvents/"+ props.user.id, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -23,17 +23,22 @@ const EventList = (props) => {
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, []);
+    }
 
-    const deleteOffer = (eventID) => {
+    useEffect(() => {
+        getEvents()
+    }, [searched]);
+
+    const deleteEvent = async (eventID) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteEvent/" + eventID, {
+            await fetch("http://localhost:3001/deleteEvent/" + eventID, {
                 method: "DELETE",
                 headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
             })
+                .then(()=>getEvents())
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }
@@ -47,10 +52,10 @@ const EventList = (props) => {
                 <td>{event.description}</td>
                 <td>{new Date(event.date).toLocaleString()}</td>
                 <td>{event.city}</td>
-                <td>{event.status}</td>
+                <td>{translate(event.status)}</td>
                 <td><Link to={"/brand/events/participants/"+event.id}>{translate("participants")}</Link></td>
                 <td><Link to={"/brand/events/"+event.id}>{translate("edit")}</Link></td>
-                <td><a onClick={() => deleteOffer(event.id)} className="underlined">{translate("delete")}</a></td>
+                <td><a onClick={() => deleteEvent(event.id)} className="underlined">{translate("delete")}</a></td>
             </tr>
             </tbody>
         );

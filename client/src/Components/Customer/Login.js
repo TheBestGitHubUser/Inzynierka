@@ -17,6 +17,8 @@ const Login = (props) => {
     }
 
     const checkLogin = async() => {
+        
+
         if (customer.email === null || customer.email.trim().length === 0) {
             setWarning(translate("require_all"))
             return;

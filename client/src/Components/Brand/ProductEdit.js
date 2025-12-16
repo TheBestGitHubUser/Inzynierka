@@ -4,6 +4,7 @@ import Warning from "../Warning";
 import NoPage from "../NoPage";
 import {useTranslation} from "react-i18next";
 import {validatePrice} from "../../Utils";
+import { CATEGORIES } from "../Constans";
 
 const OfferEdit = (props) => {
     const navigate = useNavigate();
@@ -39,9 +40,12 @@ const OfferEdit = (props) => {
         if (!validatePrice(offer.price)) {
             setWarning(translate("incorrect_price"))
             return;}
-        
+        if (offer.description.length <= 0) {
+            setWarning(translate("enter_description"))
+            return;
+        }
         if (offer.category.length <= 0) {
-            setWarning(translate("choose category"))
+            setWarning(translate("choose_category"))
             return;
         }
         if (offer.imgURL.length <= 0) {
@@ -57,8 +61,6 @@ const OfferEdit = (props) => {
                 },
                 body: JSON.stringify(offer)
             })
-                .then(res => res.json())
-                .then(data => data.insertId)
                 .catch(err => alert(translate("operation_unsuccessful")));
 
 
@@ -70,13 +72,14 @@ const OfferEdit = (props) => {
                 },
                 body: JSON.stringify(offer)
             })
+            .catch(err => alert(translate("operation_unsuccessful")));
         }
 
         exit();
     }
 
     const exit = () => {
-        navigate("/brand/products");
+        navigate(-1);
         
     }
 
@@ -93,10 +96,11 @@ const OfferEdit = (props) => {
                 <label>{translate("category")}</label><br/>
                 <select value={offer.category} id="category-input" onChange={e => setOffer({...offer, category: e.target.value})}>
                     <option value=''>{translate("choose category")}</option>
-                    <option value='obuwie'>{translate("obuwie")}</option>
-                    <option value='akcesoria'>{translate("akcesoria")}</option>
-                    <option value='przyrzad'>{translate("przyrzad")}</option>
-                    <option value='odziez'>{translate("odziez")}</option>
+                    {CATEGORIES.map((option)=>
+                        <option value={option.value}>
+                            {translate(option.label)}
+                        </option>
+                    )}
                 </select>
                 <label>{translate("image_url")}</label><br/>
                 <input type="text" defaultValue={offer.imgURL} id="url-input" onChange={e => {

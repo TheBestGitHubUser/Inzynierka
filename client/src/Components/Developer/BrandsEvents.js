@@ -24,7 +24,7 @@ const BrandsEvents = (props) => {
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, []);
+    }, [searched,events]);
 
     const deleteOffer = (eventID) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
@@ -48,7 +48,7 @@ const BrandsEvents = (props) => {
                 <td>{event.description}</td>
                 <td>{new Date(event.date).toLocaleString()}</td>
                 <td>{event.city}</td>
-                <td>{event.status}</td>
+                <td>{translate(event.status)}</td>
                 <td><a onClick={() => deleteOffer(event.id)} className="underlined">{translate("delete")}</a></td>
             </tr>
             </tbody>

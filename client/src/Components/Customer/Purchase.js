@@ -83,10 +83,10 @@ const Purchase = (props) => {
         <div className="center container two-columns">
             <h1>{translate("summary")}</h1><br/>
             <strong>{translate("product")}: {product.name}</strong> <br/>
-            <strong>{translate("price")}: {product.price}</strong> <br/>
+            <strong>{translate("price")}: {product.price} zł</strong> <br/>
             <strong>{translate("size")}: {variant.size}</strong> <br/>
             <div className="form"> 
-                <label>{translate("name")}</label><br/>
+                <label>{translate("firstname")}</label><br/>
                 <input type="text" id="name-input" onChange={e => order.name = e.target.value}/><br/>
                 <label>{translate("surname")}</label><br/>
                 <input type="text" id="surname-input" onChange={e => order.surname = e.target.value}/><br/>

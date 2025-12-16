@@ -48,7 +48,6 @@ const ArticleEdit = (props) => {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(article)
             })
-                .then(res => res.json())
                 .catch(err => alert(translate("operation_unsuccessful")));
 
 

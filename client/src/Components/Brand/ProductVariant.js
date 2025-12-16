@@ -1,57 +1,72 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Warning from "../Warning";
 
 const ProductVariant = (props) => {
     const { productID } = useParams();
     const [translate] = useTranslation("global");
     const [variants, setVariants] = useState([]);
     const [variant, setVariant] = useState({productID:productID, size: "", stock: "" });
-    const navigate = useNavigate();
+    const [warning, setWarning] = useState("");
 
-    useEffect(() => {
+    const loadVariants = ()=>{
         fetch("http://localhost:3001/getProductVariants/" + productID)
             .then(res => res.json())
             .then(data => setVariants(data))
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, [productID]);
+    }
+
+    useEffect(() => {
+        loadVariants()
+    }, [variants]);
 
     const canAddVariant = (size) => {
         const hasOneSize = variants.some(v => v.size === "one-size");
         const hasOtherSizes = variants.some(v => v.size !== "one-size");
 
         if (size === "one-size" && hasOtherSizes) {
-            alert(translate("cannot_add_onesize_with_other"));
+            setWarning(translate("cannot_add_onesize_with_other"));
             return false;
         }
         if (size !== "one-size" && hasOneSize) {
-            alert(translate("cannot_add_other_with_onesize"));
+            setWarning(translate("cannot_add_other_with_onesize"));
             return false;
         }
         return true;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        setWarning('')
         e.preventDefault();
 
+        const alreadyExist = variants.some(v => v.size === variant.size);
+
+        if(alreadyExist){
+            setWarning(translate("size_already_exist"))
+            return;
+        }
+
         if (!variant.size || !variant.stock) {
-            alert(translate("fill_all_fields"));
+            setWarning(translate("fill_all_fields"))
             return;
         }
 
         if (!canAddVariant(variant.size)) return;
 
-        fetch("http://localhost:3001/putProductVariant", {
+        const res = await fetch("http://localhost:3001/putProductVariant", {
             method: "PUT",
             headers: { "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
              },
             body: JSON.stringify(variant)
         })
-            .then(res => {
-                navigate(-1); // powrót do listy produktów
-            })
-            .catch(() => alert(translate("operation_unsuccessful")));
+        .catch(() => alert(translate("operation_unsuccessful")));
+            
+            if(res.ok){
+                loadVariants()
+                setVariant({ productID, size: "", stock: "" })
+            }   
     };
 
     const handleStockChange = (id, value) => {
@@ -60,16 +75,21 @@ const ProductVariant = (props) => {
     );
     };
 
-    const deleteVariant = (variantID) => {
+    const deleteVariant = async (variantID) => {
         if (window.confirm(translate("variant_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteVariant/" + variantID, {method: "DELETE",
+            const res = await fetch("http://localhost:3001/deleteVariant/" + variantID, {method: "DELETE",
                 headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`
              }
             })
-                .catch(err => alert(translate("operation_unsuccessful")));
+            .catch(err => alert(translate("operation_unsuccessful")));
+                
+            if(res.ok){
+                loadVariants()
+            }  
+                
         }
     }
-    const editVariant = (variantID) => {
+    const editVariant = async (variantID) => {
     const variantToEdit = variants.find(v => v.id === variantID);
 
     if (!variantToEdit) {
@@ -80,16 +100,13 @@ const ProductVariant = (props) => {
     const newStockValue = variantToEdit.stock;
 
     if (window.confirm(translate("variant_edit_confirm")) === true) {
-        fetch("http://localhost:3001/postVariant/" + variantID,
+        await fetch("http://localhost:3001/postVariant/" + variantID,
             {
                 method: "Post",
                 headers: {'Content-Type': 'application/json',
                     "Authorization": `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({stock: newStockValue}) 
-            })
-            .then(res => {
-                alert(translate("operation_successful"));
             })
             .catch(err => alert(translate("operation_unsuccessful")));
     }
@@ -125,20 +142,21 @@ const ProductVariant = (props) => {
                     type="text"
                     id="size-input"
                     placeholder="np. M, L, XL, one-size"
-                    onChange={e => variant.size = e.target.value}
+                    value={variant.size}
+                    onChange={e => setVariant(prev => ({ ...prev, size: e.target.value }))}
                 /><br />
 
                 <label>{translate("stock")}</label><br/>
                 <input
                     type="number"
                     id="stock-input"
-                    onChange={e => variant.stock = e.target.value}
+                    value={variant.stock}
+                    onChange={e => setVariant(prev => ({ ...prev, stock: e.target.value }))}
                 /><br/>
                 <br/>
-
                 <button type="submit">{translate("add")}</button>
             </form>
-
+            <Warning message={warning}/>
             <h3>{translate("existing_variants")}</h3>
             <table>
                 <thead>

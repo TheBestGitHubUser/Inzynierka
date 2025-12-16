@@ -55,7 +55,6 @@ const ReviewEdit = (props) => {
                 body: JSON.stringify(review)
             })
                 .then(res => res.json())
-                .then(data => data.insertId)
                 .catch(err => alert(translate("operation_unsuccessful")));
 
 
@@ -82,9 +81,9 @@ const ReviewEdit = (props) => {
             <h1>{review.id === '' ? "Dodaj review" : "Edytuj review"}</h1><br/>
             <div className="form"> 
                 <label>{translate("rating")}</label><br/>
-                <input type="number" defaultValue={review.rating} id="rating-input" onChange={e => review.rating = e.target.value}/><br/>
+                <input type="number" defaultValue={review.rating} id="rating-input" onChange={e => setReview({...review, rating: e.target.value})}/><br/>
                 <label>{translate("comment")}</label><br/>
-                <input type="text" defaultValue={review.comment} id="comment-input" onChange={e => review.comment = e.target.value}/><br/>
+                <input type="text" defaultValue={review.comment} id="comment-input" onChange={e => setReview({...review, comment: e.target.value})}/><br/>
                 <button onClick={() => acceptChanges(productID)}>{translate("accept")}</button>
                 <button onClick={() => exit()}>{translate("cancel")}</button>
                 <Warning message={warning}/>

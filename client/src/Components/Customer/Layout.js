@@ -23,7 +23,7 @@ const Layout = (props) => {
           props.setUser(data);
       })
       .catch(() =>{localStorage.removeItem("token");
-       navigate("/login")});
+       navigate("/")});
   }, []);
 
 
@@ -39,13 +39,14 @@ const Layout = (props) => {
                         props.setSearched(e.target.value.toLowerCase());
                     }
                 }}/>
-            </header>
+            
             <nav>
             <div className="global-actions inline">
                     <Link id="shop" to="" className="tab">{translate("shop")}</Link>
                     <Link id="events" to="tournament" className="tab">{translate("events")}</Link>
                     <Link id="articles" to="article" className="tab">{translate("articles")}</Link>
                 </div>
+                
                 <div className="global-actions inline align-right">
                     {
                         props.user?.id === undefined || props.user?.id === ''?
@@ -62,9 +63,10 @@ const Layout = (props) => {
                         } }>{translate("log_out")}</button>
                     }
 
-                    <LanguageSelect/>
+                    <LanguageSelect language={props.language} setLanguage={props.setLanguage}/>
                 </div>
             </nav>
+            </header>
             <Outlet/>
         </>
     );

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import Pagination from "../Pagination"
+import { STATUS } from "../Constans";
 
 const TournamentList = (props) => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const TournamentList = (props) => {
 
     const[currentPage,setCurrentPage] = useState(1);
     const[postPerPage,setPostPerPage] = useState(5);
+    
 
     useEffect(() => {
         fetch("http://localhost:3001/getEvents")
@@ -38,7 +40,7 @@ const TournamentList = (props) => {
                 <h3>{tour.name}</h3>
                 {tour.city}
                 <br/>
-                {tour.status}
+                {translate(tour.status)}
             </div>
         );
     });
@@ -50,16 +52,19 @@ const TournamentList = (props) => {
                 <h3>filtry</h3>
                 <select onChange={e => setStatus(e.target.value)}>
                     <option value="">{translate("all")}</option>
-                    <option value="upcoming">{translate("upcoming")}</option>
-                    <option value="ongoing">{translate("ongoing")}</option>
-                    <option value="finished">{translate("finished")}</option>
+                    {STATUS.map((option)=>
+                        <option value={option.value}>
+                            {translate(option.label)}
+                        </option>
+                    )}
                 </select>
             </div>
             <div id="product-list">
                 {TournamentList}
             </div>
             </div>
-        <div><Pagination totalPosts = {tournaments.length} postPerPage = {postPerPage}
+        <div className="center">
+            <Pagination totalPosts = {tournaments.length} postPerPage = {postPerPage}
                 setCurrentPage={setCurrentPage} currentPage = {currentPage}/></div>  
         </>
         

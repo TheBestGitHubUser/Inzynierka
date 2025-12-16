@@ -1,12 +1,12 @@
 :root {
   --dark1: #4E5136;
-  --dark2: #5f7a06;
-  --bright1: #2ba512;
+  --dark2: #0d6417b9;
+  --bright1: #64b853;
   --bright3: #A29C7B;
-  --bright2: #C7B597;
+  --bright2: #d0c9c9;
   --font-color: #e1e4e8;
   --bright-red: #cc7d7d;
-  --bright-green: #93cc7d;
+  --bright-green: #579a3d;
   --disabled: #646464;
   --warning: #ff1d1d;
   --font: 15px 'Trebuchet MS', sans-serif;
@@ -19,11 +19,18 @@
 }
 
 body {
-  background-color: var(--dark1);
+  background-image: url("D:\7semestr\Inzynierka\client\public\gradient.jpg");
+
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-position: center;
+  background-attachment: fixed;
+  
   font: var(--font);
 }
 
 header, nav {
+  opacity: 0.9;
   background-color: var(--dark2);
   color: var(--font-color);
   padding: 15px;
@@ -277,7 +284,7 @@ input:-webkit-autofill:active{
 }
 
 button.active {
-  background-color: #ffe400;
+  background-color: #ffe600ad;
 }
 
 @media screen and (max-width: 1280px) {

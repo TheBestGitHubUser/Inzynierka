@@ -9,5 +9,6 @@ describe('register event', () => {
     cy.contains("button","zapisz się")
     .click()
     
+    cy.contains("zapisałeś się na turniej")
   })
 })

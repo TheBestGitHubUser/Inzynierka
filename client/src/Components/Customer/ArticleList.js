@@ -6,8 +6,7 @@ import Pagination from "../Pagination"
 const ArticleList = (props) => {
     const navigate = useNavigate();
     const [translate, i18n] = useTranslation("global");
-    const [tournaments, setTournaments] = useState([]);
-    const [status, setStatus] = useState("");
+    const [articles, setTournaments] = useState([]);
 
     const[currentPage,setCurrentPage] = useState(1);
     const[postPerPage,setPostPerPage] = useState(5);
@@ -24,11 +23,11 @@ const ArticleList = (props) => {
                 alert(translate("conection_error"))
                 console.log(err);
             });
-    }, [props.searched, status]);
+    }, [props.searched]);
 
     const lastPostIndex = currentPage * postPerPage
     const firstPostIndex = lastPostIndex - postPerPage
-    const currentPosts = tournaments.slice(firstPostIndex,lastPostIndex)
+    const currentPosts = articles.slice(firstPostIndex,lastPostIndex)
 
     const ArticleList = currentPosts.map((tour) => {
         return (
@@ -36,6 +35,8 @@ const ArticleList = (props) => {
                 <img src={tour.imgURL} alt="box art" className="product-img"/>
                 <h3>{tour.title}</h3>
                 {translate("views")}: {tour.views}
+                <br/>
+                {translate('author')}: {tour.Developer?.User?.name}
             </div>
         );
     });
@@ -47,7 +48,8 @@ const ArticleList = (props) => {
                 {ArticleList}
             </div>
             </div>
-        <div><Pagination totalPosts = {tournaments.length} postPerPage = {postPerPage}
+        <div className="center">
+            <Pagination totalPosts = {articles.length} postPerPage = {postPerPage}
                 setCurrentPage={setCurrentPage} currentPage = {currentPage}/></div>  
         </>
         

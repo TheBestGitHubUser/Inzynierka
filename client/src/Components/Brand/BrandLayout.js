@@ -29,7 +29,7 @@ const EmpLayout = (props) => {
           });
       })
       .catch(() =>{localStorage.removeItem("token");
-       navigate("/brand")});
+       navigate("/brandLogin")});
     }, []);
 
     return (
@@ -39,7 +39,7 @@ const EmpLayout = (props) => {
                     navigate("/brand");
                 }}/>
                 <h1 className="inline">{translate("brand_platform")}</h1>
-            </header>
+            
             <nav>
                 <div className="global-actions inline">
                     <Link to="products" id='products' className="tab">{translate("products")}</Link>
@@ -59,9 +59,10 @@ const EmpLayout = (props) => {
                         props.setUser([]);
                         navigate("/")
                     } }>{translate("log_out")}</button>
-                    <LanguageSelect setLanguage={props.setLanguage}/>
+                    <LanguageSelect language={props.language} setLanguage={props.setLanguage}/>
                 </div>
             </nav>
+            </header>
             <Outlet/>
         </>
     );

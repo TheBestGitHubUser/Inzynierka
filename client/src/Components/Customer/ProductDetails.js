@@ -69,8 +69,8 @@ const ProductDetails = (props) => {
             <img src={product.imgURL} alt="box art" className="large-product-img"/>
             <div id="product-details">
                 <h1>{product.name}</h1><br/>
-                <strong>{translate("price")}: </strong>{product.price}<br/>
-                <strong>{translate("category")}: </strong>{product.category}<br/>
+                <strong>{translate("price")}: </strong>{product.price} zł<br/>
+                <strong>{translate("category")}: </strong>{translate(product.category)}<br/>
                 <strong>{translate("description")}: </strong>{product.description}<br/><br/>
                 <br></br>
                 <h3>{translate("seller_info")}</h3>
@@ -79,7 +79,7 @@ const ProductDetails = (props) => {
                 <strong>{translate("sizes")}:</strong><br/>
                 <select id="variantSelect" 
                 onChange={(e)=> setSizeID(e.target.value)}>
-                  <option value="">-- wybierz wariant --</option>
+                  <option value="">-- {translate('choose_size')} --</option>
                   {variants.map(v => (
                     <option key={v.id} value={v.id} disabled={v.stock===0}>
                       {v.size} - {v.stock}

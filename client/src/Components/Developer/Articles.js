@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import SearchBar from "../SearchBar";
 import {useTranslation} from "react-i18next";
 
@@ -7,9 +7,11 @@ const ArticleList = (props) => {
     const [articles, setArticles] = useState([]);
     const [translate, i18n] = useTranslation("global");
     const [searched, setSearched] = useState('');
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        fetch("http://localhost:3001/getDevArticles/"+ props.user.id,{
+    const getArticles = async () => {
+        if(props.user.role==='admin'){
+            await fetch("http://localhost:3001/getArticles",{
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -23,11 +25,34 @@ const ArticleList = (props) => {
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, []);
+        }else{
+            await fetch("http://localhost:3001/getDevArticles/"+ props.user.id,{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setArticles(data
+                    .filter(o => o.title.includes(searched))
+                )
+            })
+            .catch(err => alert(translate("operation_unsuccessful")));
+        }
+    }
 
-    const deleteArticle = (articleID) => {
+    useEffect(() => {
+        getArticles()
+    }, [searched,articles]);
+
+    const deleteArticle = async (articleID) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteArticle/" + articleID, {method: "DELETE"})
+            await fetch("http://localhost:3001/deleteArticle/" + articleID, {method: "DELETE"})
+                .then(()=>{getArticles()
+                }
+                )
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }
@@ -38,6 +63,7 @@ const ArticleList = (props) => {
             <tr>
                 <th>{article.id}</th>
                 <td>{article.title}</td>
+                {props.user.role==='admin' && <th>{article.Developer?.User?.name}</th>}
                 <td>{article.views}</td>
                 <td><Link to={"comments/"+article.id}>{translate("comments")}</Link> </td>
                 <td><Link to={article.id+"/"}>{translate("edit")}</Link></td>
@@ -57,6 +83,7 @@ const ArticleList = (props) => {
                 <tr>
                     <th>id</th>
                     <th>{translate("title")}</th>
+                    {props.user.role==='admin' && <th>{translate("author")}</th>}
                     <th>{translate("views")}</th>
                     <th>{translate("comments")}</th>
                     <th>{translate("edit")}</th>

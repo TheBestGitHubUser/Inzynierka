@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Warning from "../Warning";
 import { validateEmail, validateName, validatePassword } from "../../Utils";
 import { useTranslation } from "react-i18next";
+import { ROLES } from "../Constans";
 
 const EmployeeEdit = () => {
     const navigate = useNavigate();
@@ -89,14 +90,14 @@ const EmployeeEdit = () => {
                         .catch(() => alert(translate("operation_unsuccessful")));
                 
        
-        navigate('/emp/employees')
+        navigate(-1)
 
         
     };
 
     return (
         <div id="login-window" className="container">
-            <h1>{translate("register_dev_title")}</h1>
+            <h1>{translate("register_developer")}</h1>
             <input
                 type="text"
                 id="name-input"
@@ -139,11 +140,11 @@ const EmployeeEdit = () => {
                 <option value="" selected disabled hidden>
                     {translate("choose_role")}
                 </option>
-                <option value="admin">Admin</option>
-                <option value="junior">Junior</option>
-                <option value="mid">Mid</option>
-                <option value="senior">Senior</option>
-                <option value="lead">Lead</option>
+                {ROLES.map((option)=>
+                    <option value={option.value}>
+                        {translate(option.label)}
+                    </option>
+                )}
             </select>
             <br />
             <input

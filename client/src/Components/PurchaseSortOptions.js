@@ -15,11 +15,11 @@ const PurchaseSortOptions = ({setSortOpt}) => {
 
 const sortPurchases = (p1, p2, opt) => {
     switch (opt) {
-        case 1: return p2.purchase_price - p1.purchase_price;
-        case 2: return p1.purchase_price - p2.purchase_price;
-        case 3: return Date.parse(p2.purchase_time) - Date.parse(p1.purchase_time);
-        case 4: return Date.parse(p1.purchase_time) - Date.parse(p2.purchase_time);
-        default: return p1.name.localeCompare(p2.name);
+        case 1: return p2.price - p1.price;
+        case 2: return p1.price - p2.price;
+        case 3: return Date.parse(p2.createdAt) - Date.parse(p1.createdAt);
+        case 4: return Date.parse(p1.createdAt) - Date.parse(p2.createdAt);
+        default: return p1.Product.name.localeCompare(p2.Product.name);
     }
 }
 

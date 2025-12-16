@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import SearchBar from "../SearchBar";
 import {useTranslation} from "react-i18next";
 
@@ -7,6 +7,7 @@ const Brands = () => {
     const [translate, i18n] = useTranslation("global");
     const [brands, setBrands] = useState([]);
     const [searched, setSearched] = useState('');
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch("http://localhost:3001/getBrands",{
@@ -22,7 +23,7 @@ const Brands = () => {
                     .filter(c => c.User.name.includes(searched) || c.User.email.includes(searched) || c.id+''===searched)
                 )
             });
-    }, [searched]);
+    }, [searched,brands]);
 
     const deleteCustomer = (customerId) => {
         if (window.confirm(translate("user_delete_confirm")) === true) {
@@ -40,6 +41,7 @@ const Brands = () => {
                 <td>{brand.nipNumber}</td>
                 <td><Link to={'products/'+brand.id}>{translate("products")}</Link></td>
                 <td><Link to={'events/' + brand.id}>{translate("events")}</Link></td>
+                <td><Link to={"edit/" + brand.id}>{translate("edit")}</Link></td>
                 <td><a onClick={() => deleteCustomer(brand.User.id)} className="underlined">{translate("delete")}</a></td>
             </tr>
             </tbody>
@@ -50,6 +52,7 @@ const Brands = () => {
         <div className="center container">
             <h1>{translate("brands")}</h1>
             <SearchBar setSearched={setSearched}/><br/>
+             <Link id="addBrand" to="addBrand">{translate("add_brand")}</Link><br/>
             <table>
                 <thead>
                 <tr>
@@ -58,7 +61,8 @@ const Brands = () => {
                     <th>{translate("e-mail")}</th>
                     <th>nip</th>
                     <th>{translate("products")}</th>
-                    <th>{translate("events")}</th>       
+                    <th>{translate("events")}</th>
+                    <th>{translate("edit")}</th>
                     <th>{translate("delete")}</th>
                 </tr>
                 </thead>

@@ -39,6 +39,8 @@ import EmployeeEdit from './Components/Developer/EmployeeEdit';
 import EmployeesEditProfile from './Components/Developer/EditProfile'
 import ClientParticipation from './Components/Developer/ClientParticipations';
 import ClientOrders from './Components/Developer/ClientOrders';
+import AdminEdit from './Components/Developer/AdminEdit'
+import ClientEdit from './Components/Developer/ClientEdit';
 
 
 import BrandRegister from "./Components/Brand/BrandRegister"
@@ -54,9 +56,7 @@ import BrandOrders from './Components/Brand/Orders'
 import BrandOrderEdit from './Components/Brand/OrderEdit'
 import BrandReviews from './Components/Brand/Reviews'
 import BrandProfile from './Components/Brand/BrandProfile';
-
-
-
+import BrandEdit from './Components/Developer/BrandEdit';
 
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout setLanguage={setLanguage} user={user} setSearched={setSearched} setUser={setUser}/>}>
+                <Route path="/" element={<Layout language={language} setLanguage={setLanguage} user={user} setSearched={setSearched} setUser={setUser}/>}>
                     <Route path="login" element={<Login setUser={setUser}/>}/>
                     <Route path="register" element={<Register/>}/>
                     <Route index element={<ProductList searched={searched} setSearched={setSearched}/>}/>
@@ -90,7 +90,7 @@ function App() {
 
                 <Route path="/brandregister" element={<BrandRegister/>}/>
                 <Route path="/brandlogin" element={<BrandLogin setUser={setUser}/>}/>
-                <Route path='/brand' element={<BrandLayout setLanguage={setLanguage} user={user} setUser={setUser}/>}>
+                <Route path='/brand' element={<BrandLayout language={language} setLanguage={setLanguage} user={user} setUser={setUser}/>}>
                     <Route index element={<Home user={user}/>}/>
                     <Route path="products" element={<BrandProductList user={user}/>}/>
                     <Route path="products/:productID" element={<BrandProductEdit user={user}/>}/>
@@ -105,24 +105,32 @@ function App() {
                 </Route>
 
                 <Route path="/emplogin" element={<EmpLogin setUser={setUser}/>}/>
-                <Route path="/emp" element={<EmpLayout setLanguage={setLanguage} user={user} setUser={setUser}/>}>
+                <Route path="/emp" element={<EmpLayout language={language} setLanguage={setLanguage} user={user} setUser={setUser}/>}>
                     <Route index element={<Home user={user}/>}/>
 
+                    <Route path="edit" element={<EmployeesEditProfile user={user}/>}/>
                     
-                    <Route path="clients" element={<CustomerList/>}/>
-                    <Route path="clients/orders/:clientID" element={<ClientOrders/>}/>
-                    <Route path="clients/participations/:clientID" element={<ClientParticipation/>}/>
+                    <Route path="clients">
+                        <Route index element={<CustomerList/>}/>
+                        <Route path="addClient" element={<Register/>}/>
+                        <Route path='edit/:clientID' element={<ClientEdit/>}/>
+                        <Route path="orders/:clientID" element={<ClientOrders/>}/>
+                        <Route path="participations/:clientID" element={<ClientParticipation/>}/>
+                    </Route>
+                    
                     
 
                     <Route path='brands'>
                         <Route index element={<Brands/>}/>
+                        <Route path='addBrand' element={<BrandRegister/>}/>
+                        <Route path='edit/:brandID' element={<BrandEdit/>}/>
                         <Route path='products/:brandID' element={<BrandsProducts/>}/>
                         <Route path='events/:brandID' element={<BrandsEvents/>}/>
                     </Route>
 
                     <Route path='employees' element={<Employees user={user}/>}/>
                     <Route path='employees/new' element={<EmployeeEdit/>}/>
-                    <Route path='employees/edit/:developerID' element={<EmployeesEditProfile user={user}/>}/>
+                    <Route path='employees/edit/:developerID' element={<AdminEdit/>}/>
 
                     <Route path='articles' element={<Articles user={user}/>}/>
                     <Route path='articles/:articleID' element={<ArticleEdit user={user}/>}/>

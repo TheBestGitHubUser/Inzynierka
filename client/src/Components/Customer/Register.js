@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import Warning from "../Warning";
 import {validateEmail, validateGender, validateName, validatePassword} from "../../Utils";
 import {useTranslation} from "react-i18next";
+import { GENDERS } from "../Constans";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -41,12 +42,12 @@ const Register = () => {
         }
 
         if (!validatePassword(customer.password)) {
-            setWarning(translate("password_invalid"))
+            setWarning(translate("password_too_weak"))
             return;
         }
 
         if (customer.password !== customer.rePass) {
-            setWarning(translate("password_not_identicals"));
+            setWarning(translate("password_not_identical"));
             return;
         }
         if (!validateGender(customer.gender)){
@@ -72,7 +73,13 @@ const Register = () => {
             body: JSON.stringify(customer)
         })
             .catch(err => alert(translate("operation_unsuccessful")));
-        navigate("/login")
+
+        if(localStorage.getItem("token")){
+            navigate("/emp/clients")
+        }else{
+            navigate("/login")
+        }
+        
     }
 
     return (
@@ -92,6 +99,11 @@ const Register = () => {
                 <option value="" selected disabled hidden>{translate("choose_gender")}</option>
                 <option value="M">{translate("male")}</option>
                 <option value="F">{translate("female")}</option>
+                {GENDERS.map((option)=>
+                                        <option value={option.value}>
+                                            {translate(option.label)}
+                                        </option>
+                                    )}
             </select><br/>
             <button onClick={() => register()}>{translate("register")}</button>
             <Warning message={warning}/>

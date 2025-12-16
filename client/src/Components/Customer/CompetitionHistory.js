@@ -6,7 +6,7 @@ const CompetitionHistory = (props) => {
     const [translate, i18n] = useTranslation("global");
     const [competition, setCompetition] = useState([]);
 
-    useEffect(() => {
+    const getCompetitions = () =>{
         fetch("http://localhost:3001/getClientParticipation/" + props.user.id, {
             method: 'GET',
             headers: {
@@ -17,9 +17,13 @@ const CompetitionHistory = (props) => {
             .then(res => res.json())
             .then(data => setCompetition(data))
             .catch(err => alert(translate("connection_error")));
+    }
+
+    useEffect(() => {
+        getCompetitions()
     }, []);
 
-     const deleteParticipation = (id) => {
+     const deleteParticipation = async (id) => {
 
         const currentCompetition = competition.find(c => c.id === id);
         
@@ -34,13 +38,14 @@ const CompetitionHistory = (props) => {
     }
 
     if (window.confirm(translate("participation_delete_confirm")) === true) {
-        fetch("http://localhost:3001/deleteParticipation/" + id, {
+        await fetch("http://localhost:3001/deleteParticipation/" + id, {
             method: "DELETE",
             headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
         })
+            .then(() => getCompetitions())
             .catch(err => alert(translate("operation_unsuccessful")));
     }
 
@@ -53,7 +58,7 @@ const CompetitionHistory = (props) => {
             <tr>
                 <td>{compete.Event.name}</td>
                 <td>{new Date(compete.Event.date).toLocaleString()}</td>
-                <td>{compete.Event.status}</td>
+                <td>{translate(compete.Event.status)}</td>
                 <td>{compete.placement > 0 ? compete.placement : translate("not set")}</td>
                 <td><Link to={"/"+"tournament/" + compete.Event.id}>{translate("offer_page")}</Link></td>
                 <td><a onClick={() => deleteParticipation(compete.id)} className="underlined">{translate("withdraw")}</a></td>

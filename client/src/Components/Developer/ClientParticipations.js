@@ -7,8 +7,8 @@ const ClientParticipation = (props) => {
     const {clientID} = useParams()
     const [competition, setCompetition] = useState([]);
 
-    useEffect(() => {
-        fetch("http://localhost:3001/getClientParticipation/" + clientID, {
+    const getParticipations = async () => {
+        await fetch("http://localhost:3001/getClientParticipation/" + clientID, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -18,9 +18,13 @@ const ClientParticipation = (props) => {
             .then(res => res.json())
             .then(data => setCompetition(data))
             .catch(err => alert(translate("connection_error")));
-    }, []);
+    }
 
-     const deleteParticipation = (id) => {
+    useEffect(() => {
+        getParticipations()
+    }, [competition]);
+
+     const deleteParticipation = async (id) => {
 
         const currentCompetition = competition.find(c => c.id === id);
         
@@ -35,13 +39,14 @@ const ClientParticipation = (props) => {
     }
 
     if (window.confirm(translate("participation_delete_confirm")) === true) {
-        fetch("http://localhost:3001/deleteParticipation/" + id, {
+        await fetch("http://localhost:3001/deleteParticipation/" + id, {
             method: "DELETE",
             headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
         })
+            .then(await getParticipations())
             .catch(err => alert(translate("operation_unsuccessful")));
     }
 
@@ -55,7 +60,7 @@ const ClientParticipation = (props) => {
                 <td>{compete.id}</td>
                 <td>{compete.Event.name}</td>
                 <td>{new Date(compete.Event.date).toLocaleString()}</td>
-                <td>{compete.Event.status}</td>
+                <td>{translate(compete.Event.status)}</td>
                 <td>{compete.placement > 0 ? compete.placement : translate("not_set")}</td>
                 <td><a onClick={() => deleteParticipation(compete.id)} className="underlined">{translate("remove")}</a></td>
             </tr>

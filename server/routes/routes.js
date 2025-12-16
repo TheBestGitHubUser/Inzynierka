@@ -42,8 +42,8 @@ app.put("/putUser", (req,res) => {
     })
 })
 
-app.delete("/deleteUser/:userID", (req,res) =>{
-    User.destroy(
+app.delete("/deleteUser/:userID", async (req,res) =>{
+    await User.destroy(
         {
             where: {id: req.params.userID}
         }
@@ -100,6 +100,31 @@ app.post("/editProfile/:id", async (req,res) =>{
             console.log(err)
     }
 })
+
+app.post("/adminChangePassword/:id",async (req,res) =>{
+    if (!req.body.newPassword || req.body.newPassword.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters long" });
+    }
+
+    const user = await User.findOne({ where: { id: req.params.id } });
+
+    if(!user){
+        return res.status(400).json({ error: " user not found"})
+    }
+
+    try{
+        user.password = req.body.newPassword
+
+        await user.save()
+        .then(res.status(200).send())
+
+        
+    }catch(err){
+        res.status(400).send({error: 'password update error'})
+            console.log(err)
+        }
+    }
+)
 
 app.post("/changePassword/:id",async (req,res) =>{
 
@@ -245,6 +270,38 @@ app.post("/postOrder", (req,res) => {
     })
 })
 
+app.post("/cancelOrder", verifyToken, async (req,res) =>{
+
+    try{
+        const orderItem = await Order.findOne({
+        where:{ id: req.body.id }
+        })
+
+        ProductVariant.increment({
+            stock: 1
+        },
+        {where:{
+            productID: orderItem.productID,
+            size: orderItem.size
+        }
+        })
+
+
+    Order.update({
+        status: req.body.status
+    },
+    {where: {id: req.body.id}})
+    .then(
+        res.status(200).send()
+    )
+    }catch{
+        if(err){
+           console.log(err) 
+        }
+    }
+    
+})
+
 app.delete("/deleteOrder/:orderID", verifyToken, (req,res) => {
     Order.destroy({
         where:{id: req.params.orderID}
@@ -318,6 +375,36 @@ app.get("/getClients", (req,res) => {
     }).catch((err) => {
         console.log(err)
     })
+})
+
+app.get("/getClient/:id", verifyToken, (req,res)=>{
+    Client.findOne({
+        where:{id: req.params.id}
+    ,include:[{
+        model: User
+    }]}).then((client)=> {
+        res.status(200).send(client)
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+
+app.post("/postClient", verifyToken, (req,res) =>{
+    Client.update({
+    birthDate: req.body.birthDate,
+    gender: req.body.gender
+    },
+    {
+        where:{id:req.body.id}
+    })
+    .then(() => {
+        res.status(200).send();
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(400).send({ message: "Database update error" }); 
+    })
+
 })
 
 app.get("/profileClient", (req, res) => {
@@ -442,11 +529,40 @@ app.get("/getBrand/:brandID", (req,res) =>{
     })
 })
 
+app.post("/postBrand", verifyToken, (req,res) =>{
+    Brand.update({
+    nipNumber : req.body.nipNumber
+    },
+    {
+        where:{id:req.body.id}
+    })
+    .then(() => {
+        res.status(200).send();
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(400).send({ message: "Database update error" }); 
+    })
+
+})
+
 app.get("/getBrands", (req,res) => {
     Brand.findAll({include:[{
         model: User
     }]}).then((clients)=> {
         res.status(200).send(clients)
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+
+app.get("/getBrand/:id", verifyToken, (req,res)=>{
+    Brand.findOne({
+        where:{id: req.params.id}
+    ,include:[{
+        model: User
+    }]}).then((brand)=> {
+        res.status(200).send(brand)
     }).catch((err) => {
         console.log(err)
     })
@@ -1274,7 +1390,13 @@ app.post("/increaseViews", async (req,res) => {
 })
 
 app.get("/getArticles", (req,res) => {
-    Article.findAll().then((articles)=> {
+    Article.findAll({
+        include:[{
+            model: Developer,
+            include:[{model: User}]
+        }]
+    } 
+    ).then((articles)=> {
         res.send(articles)
     }).catch((err) => {
         console.log(err)

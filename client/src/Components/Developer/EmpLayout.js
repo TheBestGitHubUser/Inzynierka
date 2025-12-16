@@ -29,7 +29,7 @@ const EmpLayout = (props) => {
           });
       })
       .catch(() =>{localStorage.removeItem("token");
-       navigate("/emp")});
+       navigate("/empLogin")});
     }, []);
 
     return (
@@ -39,7 +39,7 @@ const EmpLayout = (props) => {
                     navigate("/emp");
                 }}/>
                 <h1 className="inline">{translate("employee_platform")}</h1>
-            </header>
+            
             <nav>
                 <div className="global-actions inline">
                     <Link to="clients" id="clients" className="tab">{translate("clients")}</Link>
@@ -51,13 +51,17 @@ const EmpLayout = (props) => {
                 </div>
                 <div className="global-actions inline align-right">
                     <button onClick={() =>{
+                        navigate("/emp/edit")
+                    } }>{translate("profile")}</button>
+                    <button onClick={() =>{
                         localStorage.removeItem("token")
                         props.setUser([]);
                         navigate("/")
                     } }>{translate("log_out")}</button>
-                    <LanguageSelect setLanguage={props.setLanguage}/>
+                    <LanguageSelect language={props.language} setLanguage={props.setLanguage}/>
                 </div>
             </nav>
+            </header>
             <Outlet/>
         </>
     );

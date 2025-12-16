@@ -72,7 +72,7 @@ const TournamentDetails = (props) => {
                 <strong>{translate("number_of_competitors")}: </strong><br/>
                 <strong>{translate("male")}: </strong>{competitorsM}/{event.maxCapacity}<br/>
                 <strong>{translate("female")}: </strong>{competitorsY}/{event.maxCapacity}<br/><br/>
-                <strong>{translate("status")}: </strong>{event.status}<br/>
+                <strong>{translate("status")}: </strong>{translate(event.status)}<br/>
                 <strong>{translate("description")}: </strong>{event.description}<br/>
                 
                 <br></br>

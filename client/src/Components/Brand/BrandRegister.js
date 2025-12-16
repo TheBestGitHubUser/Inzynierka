@@ -63,7 +63,12 @@ const Register = () => {
             body: JSON.stringify(brand)
         })
             .catch(err => alert(translate("operation_unsuccessful")));
-        navigate("/brandLogin")
+        
+        if(localStorage.getItem("token")){
+            navigate("/emp/brands")
+        }else{
+            navigate("/login")
+        }
     }
 
     return (

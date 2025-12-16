@@ -8,7 +8,7 @@ const ProductList = (props) => {
     const [translate, i18n] = useTranslation("global");
     const [searched, setSearched] = useState('');
 
-    useEffect(() => {
+    const getProducts = () => {
         fetch("http://localhost:3001/brands/getProducts/"+ props.user.id, {
             method: 'GET',
             headers: {
@@ -23,7 +23,11 @@ const ProductList = (props) => {
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
-    }, []);
+    }
+
+    useEffect(() => {
+        getProducts()
+    }, [searched,offers]);
 
     const deleteOffer = (offerId) => {
         if (window.confirm(translate("offer_delete_confirm")) === true) {
@@ -34,6 +38,7 @@ const ProductList = (props) => {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
             })
+                .then(getProducts())
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }
@@ -46,7 +51,7 @@ const ProductList = (props) => {
                 <td>{offer.name}</td>
                 <td>{offer.description}</td>
                 <td>{offer.price}</td>
-                <td>{offer.category}</td>
+                <td>{translate(offer.category)}</td>
                 <td><Link to={"/brand/productVariant/"+offer.id}>{translate("add_amount")}</Link></td>
                 <td><Link to={"/brand/productReviews/"+offer.id}>{translate("reviews")}</Link></td>
                 <td><Link to={offer.id + "/"}>{translate("edit")}</Link></td>

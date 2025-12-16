@@ -8,7 +8,7 @@ const Orders = (props) => {
     const [translate, i18n] = useTranslation("global");
     const [searched, setSearched] = useState('');
 
-    useEffect(() => {
+    const getOrders = () => {
         fetch("http://localhost:3001/getBrandOrders/"+ props.user.id, {
             method: 'GET',
             headers: {
@@ -19,21 +19,32 @@ const Orders = (props) => {
             .then(res => res.json())
             .then(data => {
                 setOrders(data
-                    .filter(o => o.name.includes(searched))
+                    .filter(o => o.name.includes(searched) || o.surname.includes(searched))
                 )
             })
             .catch(err => alert(translate("operation_unsuccessful")));
+    }
+
+    useEffect(() => {
+        getOrders()
     }, [searched]);
 
-    const deleteOffer = (orderID) => {
-        if (window.confirm(translate("offer_delete_confirm")) === true) {
-            fetch("http://localhost:3001/deleteOrder/" + orderID, {
-                method: "DELETE",
+    const deleteOffer = async (orderID) => {
+        if (window.confirm(translate("cancel_order")) === true) {
+            await fetch("http://localhost:3001/cancelOrder", {
+                method: "POST",
                 headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
-            }
+            },
+                body: JSON.stringify({
+                    id: orderID,
+                    status: 'canceled'
+                })
             })
+                .then(()=>{
+                    getOrders()
+                })
                 .catch(err => alert(translate("operation_unsuccessful")));
         }
     }
@@ -51,8 +62,8 @@ const Orders = (props) => {
                 <td>{order.status}</td>
                 <td>{order.Product.id}</td>
                 <td>{order.Product.name}</td>
-                <td><Link to={order.id+"/"}>{translate("edit")}</Link></td>
-                <td><a onClick={() => deleteOffer(order.id)} className="underlined">{translate("delete")}</a></td>
+                <td>{order.status==="canceled"||order.status==="returned"||order.status==="completed"?"-":<Link to={order.id+"/"}>{translate("edit")}</Link>}</td>
+                <td>{order.status==="processing"?<a onClick={() => deleteOffer(order.id)} className="underlined">{translate("cancel_order")}</a>:"-"}</td>
             </tr>
             </tbody>
         );
@@ -75,7 +86,7 @@ const Orders = (props) => {
                     <th>{translate("product_id")}</th>
                     <th>{translate("product_name")}</th>
                     <th>{translate("edit")}</th>
-                    <th>{translate("delete_order")}</th>
+                    <th>{translate("activities")}</th>
                 </tr>
                 </thead>
                 {offerList}

@@ -2,11 +2,11 @@ export const validateEmail = (email) => {
     return email !== undefined && String(email)
         .toLowerCase()
         .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         );
 };
 
-export const validatePassword = (password) => password !== undefined && password.length >= 5;
+export const validatePassword = (password) => password !== undefined && password.length >= 8;
 
 export const validateName = (name) => name !== undefined && name.length >= 3;
 
