@@ -1,14 +1,14 @@
 {
   "development": {
     "username": "root",
-    "password": "Diament11",
+    "password": null,
     "database": "inz",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "Diament11",
+    "password": null,
     "database": "inz_test",
     "host": "localhost",
     "dialect": "mysql"
